@@ -1,37 +1,8 @@
-resource "aws_instance" "example" {
+resource "aws_instance" "main" {
 ami = var.ami_id
 instance_type = var.instance_type
-vpc_security_group_ids = [aws_security_group.create_SG.id]
+vpc_security_group_ids = var.sg_ids
 
-tags = {
-    Name = "test module"
-    terraform = true
-}
+tags = local.ec2_final_tags
 }
 
-resource "aws_security_group" "create_SG" {
-  name        = "terraform_allow_tls"
-  description = "Allow traffic"
- 
-  tags = {
-    Name = "terraform_allow_tls"
-  }
-
-    egress {
-    from_port        = 0
-    to_port          = 0
-    protocol         = "-1"
-    cidr_blocks      = ["0.0.0.0/0"]
-    ipv6_cidr_blocks = ["::/0"]
-  }
-
-    ingress {
-    from_port        = 0
-    to_port          = 0
-    protocol         = "-1"
-    cidr_blocks      = ["0.0.0.0/0"]
-    ipv6_cidr_blocks = ["::/0"]
-  }
-
-
-}
